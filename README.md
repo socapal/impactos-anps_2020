@@ -50,11 +50,6 @@ Para una guía estructural adicional, ver `MAPA_DEL_REPO.md`.
 3. Ejecutar `parques-recreacion_código/2. Matching-Regresiones.r` para estimación principal.
 4. Ejecutar `parques-recreacion_código/3. Visualizaciones-y-mapas.R` para outputs gráficos.
 5. Revisar `datos-procesados/`, `ilustraciones/` y registrar sesión en `docs/DIARIO_INVESTIGACION.md`.
-
-## Nota metodológica sobre discontinuidad 2019
-
-Por cambios en inventarios/levantamiento y el choque de pandemia, el núcleo analítico recomendado se concentra en **2014m1–2018m12**. El periodo **2019+** debe tratarse como extensión complementaria de robustez, documentando explícitamente supuestos de comparabilidad y sensibilidad.
-
 ## Privacidad y manejo de información
 
 - Mantener el repositorio privado.
