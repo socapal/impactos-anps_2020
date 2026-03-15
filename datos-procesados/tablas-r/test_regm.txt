@@ -1,0 +1,98 @@
+                     Coef.  Estimate       SE  t-stat d.f. (Satt) p-val (Satt) Sig.
+               (Intercept)  5.44e+01 1.12e-01 486.960      938.00      < 0.001  ***
+                  ANP_10KM  1.87e+00 5.40e-01   3.461      162.10      < 0.001  ***
+                ANTIGUEDAD -5.58e-03 8.10e-03  -0.688      183.69      0.49204     
+            SUPERFICIEANPS  9.01e-06 4.66e-06   1.933        5.16      0.10924     
+               presupuesto -2.97e-04 8.48e-05  -3.508       44.35      0.00105   **
+                     SINAP -8.84e-01 4.72e-01  -1.873      125.99      0.06335    .
+ as.factor(CAT_MANEJO)APRN -4.37e-01 5.87e-01  -0.744      232.49      0.45761     
+   as.factor(CAT_MANEJO)MN -8.84e-01 1.25e+00  -0.705       20.40      0.48863     
+   as.factor(CAT_MANEJO)PN  4.54e-01 4.78e-01   0.950      148.10      0.34344     
+   as.factor(CAT_MANEJO)RB -1.43e+00 4.59e-01  -3.126      159.41      0.00210   **
+ as.factor(CAT_MANEJO)SANT -4.26e+00 9.80e-01  -4.350       18.39      < 0.001  ***
+
+                     Coef.  Estimate       SE  t-stat d.f. (Satt) p-val (Satt) Sig.
+               (Intercept)  5.44e+01 1.12e-01 486.960      938.00      < 0.001  ***
+                  ANP_10KM  1.87e+00 5.40e-01   3.461      162.10      < 0.001  ***
+                ANTIGUEDAD -5.58e-03 8.10e-03  -0.688      183.69      0.49204     
+            SUPERFICIEANPS  9.01e-06 4.66e-06   1.933        5.16      0.10924     
+               presupuesto -2.97e-04 8.48e-05  -3.508       44.35      0.00105   **
+                     SINAP -8.84e-01 4.72e-01  -1.873      125.99      0.06335    .
+ as.factor(CAT_MANEJO)APRN -4.37e-01 5.87e-01  -0.744      232.49      0.45761     
+   as.factor(CAT_MANEJO)MN -8.84e-01 1.25e+00  -0.705       20.40      0.48863     
+   as.factor(CAT_MANEJO)PN  4.54e-01 4.78e-01   0.950      148.10      0.34344     
+   as.factor(CAT_MANEJO)RB -1.43e+00 4.59e-01  -3.126      159.41      0.00210   **
+ as.factor(CAT_MANEJO)SANT -4.26e+00 9.80e-01  -4.350       18.39      < 0.001  ***
+
+                     Coef.  Estimate       SE   t-stat d.f. (Satt) p-val (Satt)
+               (Intercept)  5.44e+01 1.30e-01 417.7313       747.0      < 0.001
+                  ANP_10KM  7.62e-01 6.46e-01   1.1796       117.3      0.24056
+                ANTIGUEDAD -1.75e-04 9.86e-03  -0.0178       140.7      0.98584
+            SUPERFICIEANPS  3.27e-05 3.24e-05   1.0102        36.3      0.31909
+               presupuesto -1.86e-04 8.51e-05  -2.1901        38.0      0.03473
+                     SINAP -2.97e-01 5.92e-01  -0.5010        98.3      0.61747
+ as.factor(CAT_MANEJO)APRN -6.15e-01 7.24e-01  -0.8503       106.5      0.39707
+   as.factor(CAT_MANEJO)MN -4.06e-02 1.41e+00  -0.0288        19.0      0.97735
+   as.factor(CAT_MANEJO)PN  7.89e-01 6.28e-01   1.2560       106.5      0.21188
+   as.factor(CAT_MANEJO)RB -1.41e+00 5.56e-01  -2.5354       111.7      0.01261
+ as.factor(CAT_MANEJO)SANT -3.30e+00 1.08e+00  -3.0422        18.4      0.00689
+ Sig.
+  ***
+     
+     
+     
+    *
+     
+     
+     
+     
+    *
+   **
+                     Coef.  Estimate       SE   t-stat d.f. (Satt) p-val (Satt)
+               (Intercept)  5.44e+01 1.30e-01 417.7313       747.0      < 0.001
+                  ANP_10KM  7.62e-01 6.46e-01   1.1796       117.3      0.24056
+                ANTIGUEDAD -1.75e-04 9.86e-03  -0.0178       140.7      0.98584
+            SUPERFICIEANPS  3.27e-05 3.24e-05   1.0102        36.3      0.31909
+               presupuesto -1.86e-04 8.51e-05  -2.1901        38.0      0.03473
+                     SINAP -2.97e-01 5.92e-01  -0.5010        98.3      0.61747
+ as.factor(CAT_MANEJO)APRN -6.15e-01 7.24e-01  -0.8503       106.5      0.39707
+   as.factor(CAT_MANEJO)MN -4.06e-02 1.41e+00  -0.0288        19.0      0.97735
+   as.factor(CAT_MANEJO)PN  7.89e-01 6.28e-01   1.2560       106.5      0.21188
+   as.factor(CAT_MANEJO)RB -1.41e+00 5.56e-01  -2.5354       111.7      0.01261
+ as.factor(CAT_MANEJO)SANT -3.30e+00 1.08e+00  -3.0422        18.4      0.00689
+ Sig.
+  ***
+     
+     
+     
+    *
+     
+     
+     
+     
+    *
+   **
+                     Coef.  Estimate       SE  t-stat d.f. (Satt) p-val (Satt) Sig.
+               (Intercept)  5.47e+01 1.38e-01 397.284       66.33      < 0.001  ***
+                  ANP_10KM  1.44e+00 5.66e-01   2.544      128.10      0.01213    *
+                ANTIGUEDAD -3.62e-03 8.09e-03  -0.447      137.18      0.65553     
+            SUPERFICIEANPS  7.65e-06 3.57e-06   2.144        5.32      0.08162    .
+               presupuesto -2.94e-04 8.41e-05  -3.497       43.49      0.00110   **
+                     SINAP -7.58e-01 4.95e-01  -1.531      105.79      0.12867     
+ as.factor(CAT_MANEJO)APRN -4.51e-01 5.91e-01  -0.763      152.04      0.44643     
+   as.factor(CAT_MANEJO)MN -8.15e-01 1.25e+00  -0.652       20.38      0.52170     
+   as.factor(CAT_MANEJO)PN  3.96e-01 4.82e-01   0.823      117.89      0.41242     
+   as.factor(CAT_MANEJO)RB -1.53e+00 4.62e-01  -3.309      141.32      0.00119   **
+ as.factor(CAT_MANEJO)SANT -4.21e+00 9.88e-01  -4.257       18.41      < 0.001  ***
+                     Coef.  Estimate       SE  t-stat d.f. (Satt) p-val (Satt) Sig.
+               (Intercept)  5.44e+01 1.12e-01 486.364      938.00      < 0.001  ***
+                  ANP_10KM  1.88e+00 5.42e-01   3.463      162.10      < 0.001  ***
+                ANTIGUEDAD -5.58e-03 8.10e-03  -0.688      183.69      0.49204     
+            SUPERFICIEANPS  9.01e-06 4.66e-06   1.933        5.16      0.10924     
+               presupuesto -2.97e-04 8.48e-05  -3.508       44.35      0.00105   **
+                     SINAP -8.84e-01 4.72e-01  -1.873      125.99      0.06335    .
+ as.factor(CAT_MANEJO)APRN -4.37e-01 5.87e-01  -0.744      232.49      0.45761     
+   as.factor(CAT_MANEJO)MN -8.84e-01 1.25e+00  -0.705       20.40      0.48863     
+   as.factor(CAT_MANEJO)PN  4.54e-01 4.78e-01   0.950      148.10      0.34344     
+   as.factor(CAT_MANEJO)RB -1.43e+00 4.59e-01  -3.126      159.41      0.00210   **
+ as.factor(CAT_MANEJO)SANT -4.26e+00 9.80e-01  -4.350       18.39      < 0.001  ***

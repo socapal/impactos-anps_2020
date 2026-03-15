@@ -1,0 +1,132 @@
+"m.out_nearest", "m.out_nearestwr", "m.out_caliper",
+        "m.out_nearest_two","m.out_full","m.out_genetic"
+Call
+ matchit(formula = ps, data = matching, method = "nearest", distance = "glm", 
+    link = "probit", replace = FALSE, ratio = 1)
+
+Balance Measures
+              Type Diff.Adj
+distance  Distance   0.2944
+DENSIDADP  Contin.   0.1882
+PREC_MED   Contin.  -0.0022
+ELEVACION  Contin.   0.0272
+div_et     Contin.   0.0486
+INT_ECOS   Contin.   0.0077
+PRES2015   Contin.   0.2349
+REL_H_M    Contin.   0.0298
+PCON_DISC  Contin.  -0.1305
+
+Sample sizes
+          Control Treated
+All          1394     939
+Matched       939     939
+Unmatched     455       0
+Call
+ matchit(formula = ps, data = matching, method = "nearest", distance = "glm", 
+    link = "probit", replace = TRUE, ratio = 1)
+
+Balance Measures
+              Type Diff.Adj
+distance  Distance  -0.0011
+DENSIDADP  Contin.   0.0290
+PREC_MED   Contin.   0.0794
+ELEVACION  Contin.  -0.0415
+div_et     Contin.   0.0103
+INT_ECOS   Contin.  -0.0562
+PRES2015   Contin.   0.0177
+REL_H_M    Contin.  -0.0425
+PCON_DISC  Contin.  -0.0406
+
+Sample sizes
+                     Control Treated
+All                  1394.       939
+Matched (ESS)         349.75     939
+Matched (Unweighted)  545.       939
+Unmatched             849.         0
+Call
+ matchit(formula = ps, data = matching, method = "nearest", distance = "glm", 
+    link = "probit", caliper = 0.01, ratio = 1)
+
+Balance Measures
+              Type Diff.Adj
+distance  Distance   0.0025
+DENSIDADP  Contin.   0.0254
+PREC_MED   Contin.   0.0787
+ELEVACION  Contin.  -0.0912
+div_et     Contin.   0.0122
+INT_ECOS   Contin.  -0.0181
+PRES2015   Contin.   0.0410
+REL_H_M    Contin.   0.0742
+PCON_DISC  Contin.  -0.0070
+
+Sample sizes
+          Control Treated
+All          1394     939
+Matched       748     748
+Unmatched     646     191
+Call
+ matchit(formula = ps, data = matching, method = "nearest", distance = "glm", 
+    link = "probit", replace = TRUE, ratio = 2)
+
+Balance Measures
+              Type Diff.Adj
+distance  Distance  -0.0001
+DENSIDADP  Contin.   0.0261
+PREC_MED   Contin.   0.0609
+ELEVACION  Contin.  -0.0475
+div_et     Contin.   0.0128
+INT_ECOS   Contin.  -0.0510
+PRES2015   Contin.   0.0238
+REL_H_M    Contin.  -0.0222
+PCON_DISC  Contin.  -0.0409
+
+Sample sizes
+                     Control Treated
+All                  1394.       939
+Matched (ESS)         471.76     939
+Matched (Unweighted)  819.       939
+Unmatched             575.         0
+Call
+ matchit(formula = ps, data = matching, method = "full", distance = "glm", 
+    link = "probit", caliper = 0.05)
+
+Balance Measures
+              Type Diff.Adj
+distance  Distance  -0.0001
+DENSIDADP  Contin.   0.0062
+PREC_MED   Contin.   0.0498
+ELEVACION  Contin.  -0.0340
+div_et     Contin.   0.0086
+INT_ECOS   Contin.  -0.0459
+PRES2015   Contin.   0.0382
+REL_H_M    Contin.   0.0315
+PCON_DISC  Contin.  -0.0282
+
+Sample sizes
+                     Control Treated
+All                  1394.       939
+Matched (ESS)         586.68     912
+Matched (Unweighted) 1382.       912
+Unmatched              12.        27
+Call
+ matchit(formula = ps, data = matching, method = "genetic", distance = "glm", 
+    link = "probit", estimand = "ATT", discard = "none", pop.size = 1000, 
+    cluster = c("localhost", "localhost", "localhost", "localhost"))
+
+Balance Measures
+              Type Diff.Adj
+distance  Distance   0.3487
+DENSIDADP  Contin.   0.1880
+PREC_MED   Contin.  -0.0379
+ELEVACION  Contin.   0.0910
+div_et     Contin.   0.0117
+INT_ECOS   Contin.   0.0640
+PRES2015   Contin.   0.2296
+REL_H_M    Contin.  -0.0101
+PCON_DISC  Contin.  -0.1787
+
+Sample sizes
+          Control Treated
+All          1394     939
+Matched       939     939
+Unmatched     455       0

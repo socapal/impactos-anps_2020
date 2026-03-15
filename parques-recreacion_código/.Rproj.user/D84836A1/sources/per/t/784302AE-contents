@@ -1,0 +1,445 @@
+#******************************************************************************#
+#Nombre: Matching y muestreo     
+#Fecha de última actualización: 18/3/2022                              
+#Proyecto: Trabajo de grado    
+#Creador: Sebastián Ocampo Palacios (asesor Manuel A. Bautista-Gónzalez)
+#******************************************************************************#
+
+# 1. Librerías  -----------------------------------------------------------------------
+
+rm (list=ls())
+paquetes=c("dplyr","tidyr", "ggplot2", "MatchIt", "sf", "lwgeom", "beepr",
+           "readxl", "pastecs", "stargazer", "clubSandwich", "cobalt")
+sapply(paquetes, 
+       function (x){
+         if(! x %in% rownames(installed.packages()))
+           install.packages(x)
+         require(x, character.only=T)
+       })
+
+
+# Encripción y directorio (bases de datos)
+Sys.setlocale("LC_ALL", "ES_ES.UTF-8")
+setwd("D:/parques-recreacion_impacto-anps/")
+
+# 2. Bases de datos: AGEMS ------------------------------------------------
+library(readxl)
+data <- read_excel("datos-procesados/datos.xlsx", 
+                   col_types = c("text", "numeric", "numeric", 
+                                 "numeric", "numeric", "numeric", 
+                                 "numeric", "numeric", "numeric", 
+                                 "numeric", "numeric", "numeric", 
+                                 "numeric", "numeric", "text", "text", 
+                                 "numeric", "numeric", "text", "text", 
+                                 "text", "numeric", "numeric", 
+                                 "numeric", "numeric", "numeric", 
+                                 "numeric", "numeric", "numeric", 
+                                 "numeric", "numeric", "numeric",
+                                 "numeric"))
+
+IMM <- read_excel("datasets-brutas/misc.xlsx", 
+                  sheet = "IMM2020")  #?ndice_de_marginaci?n
+
+# 3. Conversión de datos --------------------------------------------------
+
+#Datos municipales
+#Convertimos datos en proporciones respecto del total
+
+### Proporciones 
+Poblacionales= c("POB_AFRO", "P5_HLI","PCON_DISC","PRES2015",
+                 "PDER_SS", #Controles para Salud
+                 "GRAPROES", "PEA") #Controles por Ingresos
+
+data$POB_AFRO=data$POB_AFRO/data$POBTOT*100
+data$P5_HLI=data$P5_HLI/data$POBTOT*100
+data$PCON_DISC=data$PCON_DISC/data$POBTOT*100
+data$POBFEM=data$POBFEM/data$POBTOT*100
+data$PDER_SS=data$PDER_SS/data$POBTOT*100
+data$PEA= as.numeric(data$PEA); data$PEA=data$PEA/data$POBTOT*100
+data$PRES2015=as.numeric(data$PRES2015)/as.numeric(data$POBTOT)*100
+
+# Factores de escala
+
+## Densidad poblacional
+data=data %>% mutate("DENSIDADP"=POBTOT/SUPERFICIE)
+## vivienda 
+data$VPH_DRENAJ=data$VPH_DRENAJ/data$VIVTOT*100
+## Integridad ecosistémica 
+data$INT_ECOS=data$INT_ECOS*100
+## Índice de Diversidad Étnica (Baqir et al.)
+div_et=(10000-(data$POB_AFRO)^2-(data$P5_HLI)^2)/100 #Revisar, no me convence.
+data$div_et=div_et
+# Precipitación media
+data=data  %>%  mutate(PREC_MED=(data$P_MAX+data$P_MIN)/2)
+# Categor?as como factores
+data$CAT_MANEJO=as.factor(data$CAT_MANEJO)
+#Presupuesto (en miles)
+data$presupuesto=data$presupuesto/1000
+
+## Estadística descriptiva
+stat.desc(data, basic=FALSE, desc=TRUE)
+
+data$SINAP
+
+# 4. Emparejamiento -------------------------------------------------------
+#Asegurarse que no hay NA, MatchIt no corre con NA
+## Debemos dejar de lado las variables que no necesitamos a?n.
+matching=data 
+
+# Cambiamos dummies por "ANP_10KM".
+names(matching) = c("CVEGEO", "POB_AFRO", "P5_HLI", "POBTOT", "REL_H_M", "PRES2015", "HOGJEF_M",    
+                    "PCON_DISC", "POBFEM", "PDER_SS", "VPH_DRENAJ", "VIVTOT", "GRAPROES", "PEA", "CVE_ENT",
+                    "CVE_MUN", "SUPERFICIE" ,
+                    "ANP_10KM", #ANP_10KM == ANP_10KM
+                    "cercanas","NOMBRE", "CAT_MANEJO", "SUPERFICIEANPS", "ANTIGUEDAD", "presupuesto","SINAP", "P_MIN",
+                    "P_MAX", "ELEVACION", "INT_ECOS", "DENSIDADP", "IM_2020", "IMN_2020","div_et", "PREC_MED")
+
+
+matching=matching[complete.cases(matching), ] #2333 variables (elimina 136)
+data %>% filter(dummies==0) %>% summarise(n()); 
+matching %>% filter(ANP_10KM==0) %>% summarise(n())  #1,476 vs. 1394  NT
+data%>% filter(dummies==1) %>% summarise(n());
+matching %>% filter(ANP_10KM==1) %>% summarise(n()) #993 vs. 939      T
+
+set.seed(1021)
+
+binaria <- "ANP_10KM"
+variables <- c("DENSIDADP", "PREC_MED", "ELEVACION", "div_et","INT_ECOS", 
+               "PRES2015", "REL_H_M", "PCON_DISC")
+ps <- as.formula(paste(binaria,
+                       paste(variables,
+                             collapse ="+"),
+                       sep= " ~ "))
+
+#Modelo más refinado
+m.out <- matchit(formula=ps,
+                      method = "full",
+                      caliper=0.05,
+                      distance = "glm", 
+                      link = "probit",
+                      data = matching)
+
+
+summary(m.out)
+        
+# Revisamos el modelo
+logit_ps = glm(ps, data = matching, family = binomial (link="logit"))
+summary(logit_ps)
+
+probit_ps=glm(ps, data = matching, family = binomial (link="probit"))
+summary(probit_ps)
+
+# Ahora guardaremos la tabla en LaTeX dentro de la carpeta datos_procesados
+#Notamos que logit es ligeramente superior
+
+stargazer(logit_ps, probit_ps, type="text") 
+
+# la siguientes líneas almacenan este modelo en un documento .tex
+
+## stargazer(logit_ps, probit_ps, type="latex", 
+## title="Índice de propensión", digits=2, 
+## dep.var.labes=c("ANPs en 10 km"),
+## covariate.labels=c("Densidad poblacional", "Precipitación media anual", 
+##                    "Elevación media", "Diversidad étnica", "Integridad ecosistema",
+##                   "Población residente en 2015", "Relación hombres por cada 100 mujeres",
+##                    "Población con discapacidad", "Constante"),
+## out="datos-procesados/tablas-r/modelo_ps.tex")
+
+# Con caliper de 0.1 perdemos 87 variables tratadas por no tener match, igualmente 542 no tratadas.
+# Las observaciones que están más cerca del propensity score no encuentran.
+# Cambiar a probit tambi?n disminuye las variables.
+
+# Guardar para el second best!!!
+
+summary(m.out, standardize = T)
+bal.tab(m.out)
+
+# plot(m.out, type = "jitter",interactive = FALSE)
+plot(m.out, type = "hist")
+love.plot(bal.tab(m.out), threshold = 0.1)
+
+##QQ1
+plot(m.out, type = "qq", interactive = FALSE,
+     which.xs = c("DENSIDADP", "PREC_MED", "ELEVACION"))
+##QQ2
+plot(m.out, type = "qq", interactive = FALSE,
+     which.xs = c("div_et","INT_ECOS", "PRES2015"))
+
+##QQ3
+plot(m.out, type = "qq", interactive = FALSE,
+     which.xs = c("REL_H_M", "PCON_DISC"))
+
+# Summary
+plot(summary(m.out))
+
+# Estos datos emparejan aquellas unidades con un P.S. similar.
+m.data <- match.data(m.out, distance = "prop.score")
+
+# Revisamos alternativas para nuestro modelo en la sección 6 (op)
+
+#Ahora necesitamos adjuntar los datos que dejamos fuera para
+## poder completar la regresi?n :) 
+data_reg=left_join(m.data %>% select(c("CVEGEO", "prop.score", 
+                                       "weights", "subclass", "ANP_10KM")),
+                   data, #BD completa
+                   by="CVEGEO")
+
+
+# Densidad
+data_reg %>% 
+  ggplot(aes(x=prop.score, group=ANP_10KM, fill=ANP_10KM)) +
+  geom_density(color="#e9ecef", alpha=0.8)
+
+# 5. Regresiones ----------------------------------------------------------
+
+# Ingreso
+
+
+# Índice de marginación
+## Utilizando {base}
+reg_slm=lm(IM_2020 ~ ANP_10KM +
+             ANTIGUEDAD + SUPERFICIEANPS + 
+             presupuesto + SINAP + CAT_MANEJO,
+           data = data_reg, weights = weights); summary(reg_slm)
+
+#Errores estándar agrupados.
+coef_slm=coef_test(reg_slm,
+          vcov = "CR1S",
+          cluster = data_reg$subclass); coef_slm
+
+# Ahora estimaremos de forma independiente cada componente.
+
+componentes_IMM=c("ANALF", "SBASC",  
+"OVSDE", "OVSEE", "OVSAE", "OVPT",
+"VHAC", "PL.5000", "PO2SM")
+
+data_reg_comp=right_join(data_reg, 
+           IMM %>% select(c(CVEGEO="CVE_MUN", 
+                            all_of(componentes_IMM))),
+           by="CVEGEO")
+
+
+#https://stackoverflow.com/questions/34112021/plugging-an-lm-into-a-for-loop-in-r
+  # Rehacemos pero utilizando {base}
+  reg_slm=lm(ANALF ~ ANP_10KM +
+               ANTIGUEDAD + SUPERFICIEANPS + 
+               presupuesto + SINAP + CAT_MANEJO,
+             data = data_reg_comp, weights = weights); summary(reg_slm)
+  
+  #Errores estándar agrupados.
+  coef_test(reg_slm,
+            vcov = "CR1S",
+            cluster = data_reg$subclass)[2,]
+
+# Otras regresiones
+
+# Adscripción al seguro social
+reg_ss=lm(PDER_SS ~ ANP_10KM + ANTIGUEDAD + CAT_MANEJO +
+               SUPERFICIEANPS + presupuesto + SINAP,
+             data = data_reg); reg_ss
+
+            coef_test(reg_ss,
+              vcov = "CR1S",
+              cluster = data_reg$subclass)
+
+# Población económicamente activa
+reg_PEA=lm(PEA ~ ANP_10KM + ANTIGUEDAD + CAT_MANEJO +
+             SUPERFICIEANPS + presupuesto + SINAP,
+           data = data_reg); summary(reg_ss)
+
+coef_test(reg_PEA,
+          vcov = "CR1S",
+          cluster = data_reg$subclass)
+
+
+# 6. Refinamiento  --------------------------------------------------------
+
+# Especificación utilizando una varaición del PS según si
+## se trata de una ANP marítima.
+
+
+
+
+# 7. Métodos matching ---------------------------------------------------------
+## Compareremos al final con una tabla.
+
+# No NAs
+matching=matching[complete.cases(matching), ] #2333 variables (elimina 136)
+
+# |  7.1.1 One Neighbour (ON) --------------------------------------------------------
+
+m.out_nearest=matchit(formula=ps,
+                method = "nearest",
+                ratio = 1,
+                distance= "glm",
+                link = "probit", #Cambiar de logit a probit ofrece una mejora...
+                replace = FALSE,
+                data = matching)
+
+bal.tab(m.out_nearest) # Observamos que la diferencia de ajuste es de 0.3 para el ps.
+
+
+# |  7.1.2 ON (w/replacement)  --------------------------------------------------------
+
+m.out_nearestwr=matchit(formula=ps,
+                      method = "nearest",
+                      ratio=1,
+                      distance= "glm",
+                      link = "probit", #Cambiar a probit  también mejora...
+                      replace = TRUE,
+                      data = matching)
+
+bal.tab(m.out_nearestwr) # Observamos que la diferencia de ajuste es de 0.3 para el ps.
+
+
+# | 7.1.3 ON (Caliper) --------------------------------------------
+
+m.out_caliper=matchit(formula=ps,
+                        method = "nearest",
+                        caliper=0.01,
+                        ratio=1,
+                        distance= "glm",
+                        link = "probit",
+                        data = matching)
+
+bal.tab(m.out_caliper) # nálogo
+
+
+# | 7.2 Vecinos múltiples (wr) ---------------------------------------------------
+# Para este punto establecemos replacement (mejora resultados) y fijamos probit.
+## Intentamos obtener resultados para 1, 2, 3 y 5 vecinos cercanos. Parece que el 
+## segundo mejor es 2 (pero hay que confirmarlo).
+m.out_nearest_two=matchit(formula=ps,
+                      method = "nearest",
+                      ratio = 2,
+                      distance= "glm",
+                      link = "probit",
+                      replace = TRUE,
+                      data = matching)
+
+bal.tab(m.out_nearest) # Observamos que la diferencia de ajuste es de 0.3 para el ps.
+
+# | 7.3 Full matching  ------------------------------------------------------
+require("optmatch")
+
+# Emparejamiento de muestra completa :) 
+m.out_full <- matchit(formula=ps,
+                      method = "full",
+                      caliper=0.05,
+                      distance = "glm", 
+                      link = "probit",
+                      data = matching)
+
+bal.tab(m.out_full, data=matching)
+  # En comparación con el matching de un único 
+
+
+#  | 7.4 Genetic Matching -------------------------------------------------
+
+# Requiere de una función para el paquete rgneoud. La instalación
+## está abajo
+
+#if (!require("devtools")) install.packages("devtools")
+#devtools::install_github("JasjeetSekhon/rgenoud")
+
+# El método genético tiene un tamaño de población definido de 100 personas.
+## Por esto, es importante que lo modifiquemos. Eso sí, el proceso es lento y 
+## realizarlo puede ser más tardado al extender el pop.size. Revisar 
+## el tiempo de de ejecución con una pob. de 100 para considerar incrementarlo.
+## Utilizamos cuatro núcleos para facilitar el procesamiento. 
+## En mi caso son 35 minutos para cuatro núcleos y 1000 observaciones.
+start=Sys.time()
+m.out_genetic <- matchit(formula=ps,
+                      method = "genetic",
+                      distance = "glm", 
+                      link = "probit",
+                      estimand = "ATT",
+                      discard = "none",
+                      data = matching,
+                      pop.size=1000,
+                      cluster = c("localhost",
+                                  "localhost", "localhost", "localhost"))
+Sys.time()-start #Tiempo de ejecución.
+beep()
+bal.tab(m.out_genetic, data=matching)
+
+# saveRDS(m.out_genetic, "datos-procesados/m.out_genetic.RData")
+
+
+#  | 7.5 Regresiones de comparación ----------------------------------------------
+
+# Nuestra lista de variantes en emparejamiento
+match_variants=as.list(c("m.out_nearest", "m.out_nearestwr", "m.out_caliper",
+  "m.out_nearest_two","m.out_full","m.out_genetic"))
+
+# Lista en la que almacenaremos resultados simples
+reg_results=list(c())
+# Lista en la que almacenaremos resultados con características 
+regm_results=list(c())
+# Lista en la que almacenamos tablas de balance
+bal.tab_results=list(c())
+###
+
+##No pude automatizar el proceso... Simplemente falta hacer que el for pueda
+## obtener los objetos matchit (por ejemplo m.out) para que le algoritmo sirva.
+## No obstante, con tan solo hacer el remplazo de cada método en el algoritmo
+## siguiente, así como de sus índices (m.out_nearest=1) podemos obtener la
+## tabla
+
+
+
+# for (i in 1:length(match_variants)){
+  
+  # Analizamos la regresión simple para cada modelo.
+
+      # Primero generamos los datos 
+      m.data <- match.data(m.out_nearest, distance = "distance")
+      
+      bal.tab_results[[i]]=bal.tab(m.out_genetic, data=matching)
+      
+      data_reg=left_join(m.data %>% select(c("CVEGEO", "distance", 
+                                         "weights", "subclass",
+                                         "ANP_10KM")),
+                     data, #BD completa
+                     by="CVEGEO")
+      
+      # Realizamos la regresión simple (utilizamos {base})
+      reg_slm=lm(IM_2020 ~ ANP_10KM,
+                 data = data_reg, weights = weights); 
+      summary(reg_slm)
+      
+        # Errores estándar agrupados.
+      reg_results[[i]]=coef_test(reg_slm,
+                        vcov = "CR1S",
+                        cluster = data_reg$subclass)
+      
+      # Regresión con características de ANPs
+      reg_mlm=lm(IM_2020 ~ ANP_10KM +
+                   ANTIGUEDAD + SUPERFICIEANPS + 
+                   presupuesto + SINAP + as.factor(CAT_MANEJO),
+                 data = data_reg, weights = weights); 
+      summary(reg_mlm)
+      
+        # Errores estándar agrupados.
+      regm_results[[i]]=coef_test(reg_mlm,
+                         vcov = "CR1S",
+                         cluster = data_reg$subclass)
+      
+#}
+
+      c("m.out_nearest", "m.out_nearestwr", "m.out_caliper",
+        "m.out_nearest_two","m.out_full","m.out_genetic")
+      
+# Podemos almacenar los resultados acá:
+      #capture.output(bal.tab_results[[6]], 
+      #file="datos-procesados/tablas-r/test_bal.txt", append = TRUE)
+      #capture.output(reg_results[[1]], 
+      #              file="datos-procesados/tablas-r/test_reg1.txt", append = TRUE)
+      #capture.output(regm_results[[6]], 
+      #              file="datos-procesados/tablas-r/test_regm.txt", append = TRUE)
+
+
+      
+      
+# Falta especificar diferentes tipos de error...
+

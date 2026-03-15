@@ -1,0 +1,25 @@
+{
+    "id": "D180ADB7",
+    "path": "D:/parques-recreacion_impacto-anps/parques-recreacion_código/0. Procesamiento-datos.R",
+    "project_path": "0. Procesamiento-datos.R",
+    "type": "r_source",
+    "hash": "3171986641",
+    "contents": "",
+    "dirty": false,
+    "created": 1652068330289.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "cursorPosition": "355,0",
+        "scrollLine": "343",
+        "docOutlineVisible": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1651781130,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1651781130,
+    "read_only": false,
+    "read_only_alternatives": []
+}
