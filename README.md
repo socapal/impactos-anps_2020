@@ -50,7 +50,4 @@ Para una guía estructural adicional, ver `MAPA_DEL_REPO.md`.
 3. Ejecutar `parques-recreacion_código/2. Matching-Regresiones.r` para estimación principal.
 4. Ejecutar `parques-recreacion_código/3. Visualizaciones-y-mapas.R` para outputs gráficos.
 5. Revisar `datos-procesados/`, `ilustraciones/` y registrar sesión en `docs/DIARIO_INVESTIGACION.md`.
-## Privacidad y manejo de información
 
-- Mantener el repositorio privado.
-- Evitar incluir datos sensibles o identificadores personales en documentos de texto o logs.
