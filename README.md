@@ -28,20 +28,11 @@ Repositorio general de investigación para documentar, organizar y hacer replica
 
 Para una guía estructural adicional, ver `MAPA_DEL_REPO.md`.
 
-## Qué NO es este repositorio
-
-- No es únicamente el entregable de un manuscrito.
-- No está limitado a una sola especificación o ventana temporal.
-- No sustituye el control de versiones por ramas temáticas.
-
 ## Principios de versionado
 
 - `main`: base estable/documental del repositorio general.
-- `paper-*`: ramas para manuscritos acotados (ej. `paper-sismos-2014-2019`).
-- `data-*`: cambios mayores de construcción/armonización de datos.
-- `fig-*`: iteraciones de visualización y reportes gráficos.
 
-## Pipeline mínimo de reproducción (resumen)
+## Pipeline de reproducción
 
 > Ajustar rutas locales al inicio de cada script antes de correr.
 
@@ -49,5 +40,3 @@ Para una guía estructural adicional, ver `MAPA_DEL_REPO.md`.
 2. Ejecutar `parques-recreacion_código/1. Estadística-descriptiva.R` para validación descriptiva.
 3. Ejecutar `parques-recreacion_código/2. Matching-Regresiones.r` para estimación principal.
 4. Ejecutar `parques-recreacion_código/3. Visualizaciones-y-mapas.R` para outputs gráficos.
-5. Revisar `datos-procesados/`, `ilustraciones/` y registrar sesión en `docs/DIARIO_INVESTIGACION.md`.
-
