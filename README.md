@@ -40,3 +40,12 @@ Para una guía estructural adicional, ver `MAPA_DEL_REPO.md`.
 2. Ejecutar `parques-recreacion_código/1. Estadística-descriptiva.R` para validación descriptiva.
 3. Ejecutar `parques-recreacion_código/2. Matching-Regresiones.r` para estimación principal.
 4. Ejecutar `parques-recreacion_código/3. Visualizaciones-y-mapas.R` para outputs gráficos.
+
+## Licencia
+
+Este repositorio usa una licencia mixta:
+- código: MIT
+- documentación, figuras y materiales originales no software: CC BY 4.0
+- datos de terceros: conservan sus términos originales
+
+Consulta el archivo `LICENSE` para detalles.
